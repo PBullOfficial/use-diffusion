@@ -1,6 +1,7 @@
 from diffusers import DiffusionPipeline
 import torch
-from PIL import Image
+from datetime import datetime
+import os
 
 pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16")
 pipe.to("cuda")
@@ -8,26 +9,25 @@ pipe.to("cuda")
 # if using torch < 2.0
 # pipe.enable_xformers_memory_efficient_attention()
 
-prompt = "An cool cat wearing sunglasses"
+prompt = "A cool cat wearing sunglasses."
 
 result = pipe(prompt=prompt)
 images = result.images[0]
 
-# Check the type of the 'images' object
-image_type = type(images)
-print(f"The type of the 'images' object is: {image_type}")
+# Generate a unique filename with a timestamp
+filename = "output_image_" + datetime.now().strftime("%Y%m%d%H%M%S") + ".png"
 
-# Handle the 'images' object depending on its type
-if isinstance(images, Image.Image):
-    images.save('output_image.png')
-    print("Image saved as 'output_image.png'")
-elif isinstance(images, torch.Tensor):
-    image_data = images.permute(1, 2, 0).cpu().numpy()
-    pil_image = Image.fromarray((image_data * 255).astype('uint8'))
-    pil_image.save('output_image.png')
-    print("Image saved as 'output_image.png'")
-else:
-    print("Unknown object type. Cannot save.")
+# Define the path to the images folder inside the project directory
+project_root_path = "d:\\Initiatives\\use-diffusion"
+images_folder_path = os.path.join(project_root_path, 'images')
 
+# Create the images folder if it doesn't exist
+if not os.path.exists(images_folder_path):
+    os.makedirs(images_folder_path)
 
-# images = pipe(prompt=prompt).images[0]
+# Combine the path with the filename
+path = os.path.join(images_folder_path, filename)
+
+# Save the image with the unique filename in the specified path
+images.save(path)
+print(f"Image saved as '{path}'")
