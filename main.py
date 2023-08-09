@@ -17,7 +17,7 @@ images = result.images[0]
 # Generate a unique filename with a timestamp
 filename = "output_image_" + datetime.now().strftime("%Y%m%d%H%M%S") + ".png"
 
-# Define the path to the images folder inside the project directory
+# Define the path to the images folder inside the project directory (change if needed)
 project_root_path = "d:\\Initiatives\\use-diffusion"
 images_folder_path = os.path.join(project_root_path, 'images')
 
