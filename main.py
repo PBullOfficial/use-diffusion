@@ -9,7 +9,7 @@ pipe.to("cuda")
 # if using torch < 2.0
 # pipe.enable_xformers_memory_efficient_attention()
 
-prompt = "A cool cat wearing sunglasses."
+prompt = "a cool cat wearing sunglasses"
 
 result = pipe(prompt=prompt)
 images = result.images[0]
